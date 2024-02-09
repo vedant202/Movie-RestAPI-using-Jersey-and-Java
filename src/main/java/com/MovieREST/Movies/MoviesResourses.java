@@ -16,6 +16,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.MovieREST.DatabaseConnection.MySQLCon;
 
 
@@ -110,6 +113,55 @@ public class MoviesResourses {
 		 
 		return m;
 	}
+	
+	
+	@Path("/moviesAndGenres")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getMoviesAndGeneres() {
+		
+		JSONArray moviesGenres = new JSONArray();
+		
+		MySQLCon mysql = new MySQLCon();
+		Connection con=mysql.getMYSQLConnection();
+		
+		String sql = "select * from movies inner join movies_genres as g on id=g.movie_id limit 30";
+		try(Statement statement = con.createStatement()){
+			
+			try(ResultSet rs = statement.executeQuery(sql)){
+				
+				while(rs.next()) {
+					
+					JSONObject json_obj = new JSONObject();
+					json_obj.put("movie_name", rs.getString(2));
+					json_obj.put("year", rs.getInt(3));
+					json_obj.put("genre", rs.getString(6));
+					
+					moviesGenres.put(json_obj);
+					
+					
+				}
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return moviesGenres.toString();
+
+	}
+	
+
 	
 	
 	@POST

@@ -16,6 +16,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+
+
 import com.MovieREST.DatabaseConnection.MySQLCon;
 
 @Path("/actors")
@@ -62,11 +64,7 @@ public class MovieActors {
 		
 	}
 	
-	public void getActorAndMovies() {
 		
-	}
-	
-	
 	
 	@POST
 	@Path("/actor/{actor_id}")
